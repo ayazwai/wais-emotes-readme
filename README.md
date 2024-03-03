@@ -54,6 +54,11 @@ end
         local model = exports["appearance-name"]:getPedModel(ped)
         return joaat(model)
     end
+
+    -- If you don't want to use it, or if none of them are compatible, use
+    Config.GetPedModel = function()
+        return 1885233650
+    end
 ```
 
 - For qb-clothing:
