@@ -67,28 +67,35 @@ end
 local QBCore = exports['qb-core']:GetCoreObject()
 
 Config.SetExamplePedSkin = function(ePed)
-    local skin = Config.GetPlayerSkin(QBCore.Functions.GetPlayerData().citizenid)
-    TriggerEvent('qb-clothing:client:loadPlayerClothing', skin.skin, ePed)
+    while next(Config.Skins) == nil do
+        Wait(500)
+    end
+    TriggerEvent('qb-clothing:client:loadPlayerClothing', Config.Skins.skin, ePed)
 end
 
 Config.GetPedModel = function()
-    local skin = Config.GetPlayerSkin(QBCore.Functions.GetPlayerData().citizenid)
-    return joaat(skin.model)
+    TriggerServerEvent('wais:getSkin', QBCore.Functions.GetPlayerData().citizenid)
+    while next(Config.Skins) == nil do
+        Wait(500)
+    end
+    return joaat(Config.Skins.model)
 end
 
 -- You have to add this function.
 
 function Config.GetPlayerSkin(citizenid, cb)
+    local p = promise:new()
     MySQL.Async.fetchAll('SELECT * FROM playerskins WHERE citizenid = @citizenid AND active = @active', {
         ['@citizenid'] = citizenid,
         ['@active'] = 1
     }, function(result)
         if result[1] ~= nil then
-            cb(result[1].model, result[1].skin)
+            p:resolve({model = tonumber(result[1].model), skin = json.decode(result[1].skin)})
         else
-            cb(nil)
+            p:resolve(nil)
         end
     end)
+    return Citizen.Await(p)
 end
 ```
 
@@ -96,10 +103,10 @@ end
 
 ```
 server_scripts {
-    '@mysql-async/lib/MySQL.lua', -- You have to add this line
+    'config.lua',
+    '@mysql-async/lib/MySQL.lua',
     'server.lua',
     'converter.lua',
-    'config.lua',
 }
 ```
 
