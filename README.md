@@ -96,10 +96,10 @@ end
 
 ```
 server_scripts {
+    '@mysql-async/lib/MySQL.lua', -- You have to add this line
     'server.lua',
     'converter.lua',
     'config.lua',
-    '@mysql-async/lib/MySQL.lua', -- You have to add this line
 }
 ```
 
