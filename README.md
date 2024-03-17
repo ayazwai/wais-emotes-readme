@@ -26,10 +26,10 @@ ensure wais-emotes
 local ESX = exports['es_extended']:getSharedObject()
 local QBCore = exports['qb-core']:GetCoreObject()
 
-Config.Notification = function(mIndex, types)
-    exports['okokNotify']:Alert('Title', Config.Messages[mIndex], 2500, types, false)
-    ESX.ShowNotification(Config.Messages[mIndex])
-    QBCore.Functions.Notify(Config.Messages[mIndex], types)
+Config.Notification = function(message, types)
+    exports['okokNotify']:Alert('Title', message, 2500, types, false)
+    ESX.ShowNotification(message)
+    QBCore.Functions.Notify(message, types)
 end
 ```
 
